@@ -5,8 +5,12 @@ import sys
 from pathlib import Path
 from PIL import Image
 
+from PIL import ImageChops
+
 src = Image.open(sys.argv[1]).convert("RGBA")
-alpha = src.getchannel("A")
+# Täckning = alfa × ljushet: vita delar blir färgade, mörka konturlinjer
+# (t.ex. mellan fingrarna) blir genomskinliga så detaljerna bevaras.
+alpha = ImageChops.multiply(src.getchannel("A"), src.convert("L"))
 box = alpha.getbbox()
 if box:
     src, alpha = src.crop(box), alpha.crop(box)
