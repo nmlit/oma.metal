@@ -7,6 +7,8 @@ set -euo pipefail
 
 URL="${OMA_METAL_URL:-https://wr03-ice.stream.khz.se/wr03_mp3}"
 UNIT="oma-metal"
+# Andra oma-radioplugin som stoppas när den här startar (bara en ström åt gången).
+SIBLINGS=(oma-synth)
 STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/oma.metal"
 PID_FILE="$STATE_DIR/pid"
 NOW_FILE="$STATE_DIR/nowplaying"
@@ -47,6 +49,10 @@ sync_state() {
 start() {
   active && { sync_state; return; }
   player_cmd
+  local u
+  for u in "${SIBLINGS[@]}"; do
+    systemctl --user stop "$u.service" >/dev/null 2>&1 || true
+  done
   systemctl --user reset-failed "$UNIT.service" >/dev/null 2>&1 || true
   systemd-run --user --quiet --collect --unit="$UNIT" \
     --description="oma.metal stream" \

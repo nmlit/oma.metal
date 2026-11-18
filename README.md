@@ -44,6 +44,11 @@ Den lever alltså inte som barnprocess till omarchy-shell:
 Pluginet skriver aldrig i sin egen mapp. Spelarens PID sparas i
 `~/.local/state/oma.metal/pid` medan strömmen spelar och tas bort vid stopp.
 
+## Bara en ström åt gången
+
+När oma.metal startar stoppas [oma.synth](https://github.com/nmlit/oma.synth)
+(`oma-synth.service`) om den spelar, och tvärtom.
+
 ## Låt och artist i tooltip
 
 Håll muspekaren över ikonen medan strömmen spelar så visas låten som

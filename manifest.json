@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "oma.metal",
   "name": "Metal",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "author": "nmlit",
   "license": "MIT",
   "description": "Spela metalströmmen från khz.se med ett klick i Omarchy-baren.",
