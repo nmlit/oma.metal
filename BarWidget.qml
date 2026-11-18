@@ -10,7 +10,7 @@ BarWidget {
 
   readonly property var metal: bar && bar.shell ? bar.shell.serviceFor(pluginId) : null
   readonly property bool playing: metal ? metal.playing : false
-  readonly property string tooltip: !playing ? "oma.metal – klicka för att spela"
+  readonly property string tooltip: !playing ? "Bandit Metal"
     : (metal.nowPlaying !== "" ? metal.nowPlaying : "Bandit Metal – hämtar låt…")
 
   visible: metal !== null

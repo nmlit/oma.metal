@@ -48,7 +48,7 @@ Pluginet skriver aldrig i sin egen mapp. Spelarens PID sparas i
 
 Håll muspekaren över ikonen medan strömmen spelar så visas låten som
 `Artist - Låt`, t.ex. `Pantera - Walk`. Är strömmen avstängd står det
-`oma.metal – klicka för att spela`.
+`Bandit Metal`.
 
 - Titeln hämtas i första hand från strömmens egen ICY-metadata via mpv:s
   IPC-socket (`$XDG_RUNTIME_DIR/oma.metal/mpv.sock`), alltså exakt det som hörs.
