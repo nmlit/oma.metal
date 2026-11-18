@@ -10,6 +10,8 @@ BarWidget {
 
   readonly property var metal: bar && bar.shell ? bar.shell.serviceFor(pluginId) : null
   readonly property bool playing: metal ? metal.playing : false
+  readonly property string tooltip: !playing ? "oma.metal – klicka för att spela"
+    : (metal.nowPlaying !== "" ? metal.nowPlaying : "Bandit Metal – hämtar låt…")
 
   visible: metal !== null
   implicitWidth: button.implicitWidth
@@ -20,7 +22,11 @@ BarWidget {
     anchors.fill: parent
     bar: root.bar
     slotSize: Style.bar.iconSlot
-    tooltipText: root.playing ? "Stoppa metal" : "Spela metal"
+    tooltipText: root.tooltip
+    // Baren läser texten när pekaren kommer in; visa ny låt direkt om den byts
+    // medan man hovrar.
+    onTooltipTextChanged: if (tooltipHovered && root.bar) root.bar.showTooltip(button, tooltipText)
+    onTooltipHoveredChanged: if (root.metal) root.metal.hovered = tooltipHovered
     iconComponent: Component {
       Image {
         source: Qt.resolvedUrl(root.playing ? "icon-red.png" : "icon-white.png")

@@ -12,6 +12,10 @@ Item {
   readonly property string script: Qt.resolvedUrl("metal.sh").toString().replace("file://", "")
 
   property bool playing: false
+  // "Artist - Låt" (ICY-titel från mpv, annars viaplayradio.se:s API).
+  property string nowPlaying: ""
+  // Sätts av BarWidget när muspekaren är över ikonen.
+  property bool hovered: false
   readonly property bool busy: ctlProc.running
 
   function run(action) {
@@ -23,6 +27,10 @@ Item {
   function toggle() { if (ctlProc.running) return; var next = !root.playing; run(next ? "start" : "stop"); root.playing = next }
   function play() { if (ctlProc.running) return; run("start"); root.playing = true }
   function stop() { if (ctlProc.running) return; run("stop"); root.playing = false }
+  function refreshNowPlaying() { if (root.playing && !npProc.running) npProc.running = true }
+  onPlayingChanged: if (playing) npKick.restart()
+  onHoveredChanged: if (hovered) refreshNowPlaying()
+
   function refresh() { if (!statusProc.running && !ctlProc.running) statusProc.running = true }
 
   Process {
@@ -41,6 +49,26 @@ Item {
       waitForEnd: true
       onStreamFinished: root.playing = text.trim() === "playing"
     }
+  }
+
+  Process {
+    id: npProc
+    command: ["bash", root.script, "nowplaying"]
+    stdout: StdioCollector {
+      waitForEnd: true
+      onStreamFinished: { var t = text.trim(); if (t !== "") root.nowPlaying = t }
+    }
+  }
+
+  // Strömmen behöver någon sekund innan första ICY-titeln finns.
+  Timer { id: npKick; interval: 2500; onTriggered: root.refreshNowPlaying() }
+
+  // Låg belastning: bara medan strömmen spelar.
+  Timer {
+    interval: 15000
+    running: root.playing
+    repeat: true
+    onTriggered: root.refreshNowPlaying()
   }
 
   // Fångar även att strömmen dött av sig själv (t.ex. nätverksfel).

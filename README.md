@@ -44,6 +44,27 @@ Den lever alltså inte som barnprocess till omarchy-shell:
 Pluginet skriver aldrig i sin egen mapp. Spelarens PID sparas i
 `~/.local/state/oma.metal/pid` medan strömmen spelar och tas bort vid stopp.
 
+## Låt och artist i tooltip
+
+Håll muspekaren över ikonen medan strömmen spelar så visas låten som
+`Artist - Låt`, t.ex. `Pantera - Walk`. Är strömmen avstängd står det
+`oma.metal – klicka för att spela`.
+
+- Titeln hämtas i första hand från strömmens egen ICY-metadata via mpv:s
+  IPC-socket (`$XDG_RUNTIME_DIR/oma.metal/mpv.sock`), alltså exakt det som hörs.
+- Fungerar inte det (t.ex. annan spelare än mpv eller ingen titel i strömmen) används
+  samma JSON-API som [viaplayradio.se/banditmetal](https://www.viaplayradio.se/banditmetal/)
+  själv använder: `https://app.khz.se/api/v3/channels/8` (`current_song`).
+- Titeln uppdateras var 15:e sekund, bara medan strömmen spelar, och direkt när
+  pekaren förs över ikonen. Senast kända titel sparas i
+  `~/.local/state/oma.metal/nowplaying`.
+- Kräver `jq`, `curl` och `socat` (finns i en vanlig Omarchy-installation; utan
+  `socat` används API:t).
+
+```bash
+~/.config/omarchy/plugins/oma.metal/metal.sh nowplaying   # Artist - Låt
+```
+
 ## Kommandon
 
 ```bash
