@@ -8,7 +8,7 @@ set -euo pipefail
 URL="${OMA_METAL_URL:-https://wr03-ice.stream.khz.se/wr03_mp3}"
 UNIT="oma-metal"
 # Andra oma-radioplugin som stoppas när den här startar (bara en ström åt gången).
-SIBLINGS=(oma-synth)
+SIBLINGS=(oma-synth oma-jul)
 STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/oma.metal"
 PID_FILE="$STATE_DIR/pid"
 NOW_FILE="$STATE_DIR/nowplaying"
